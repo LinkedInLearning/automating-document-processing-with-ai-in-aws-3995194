@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Applicant Viewer</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7fa;
+            color: #333;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        button {
+            padding: 12px 24px;
+            font-size: 1rem;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        button:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        #error {
+            color: #e74c3c;
+            margin: 10px 0;
+            display: none;
+            font-size: 0.9rem;
+        }
+        table {
+            width: 100%;
+            max-width: 1200px;
+            border-collapse: separate;
+            border-spacing: 0;
+            background-color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+        }
+        th {
+            background-color: #34495e;
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+        td {
+            border-bottom: 1px solid #ecf0f1;
+            font-size: 0.95rem;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        tr:hover td {
+            background-color: #f9fbfc;
+            transition: background-color 0.2s;
+        }
+        /* Status Dropdown Styles */
+        .status-select {
+            padding: 6px 12px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-size: 0.85rem;
+            min-width: 100px;
+            cursor: pointer;
+        }
+        .status-select.applied {
+            background-color: #3498db;
+            color: white;
+        }
+        .status-select.denied {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .status-select.inprogress {
+            background-color: #e67e22;
+            color: white;
+        }
+        .status-select.hired {
+            background-color: #2ecc71;
+            color: white;
+        }
+        /* Dark Mode */
+        .dark-mode body {
+            background-color: #1a1a1a;
+            color: #ddd;
+        }
+        .dark-mode h1 {
+            color: #ecf0f1;
+        }
+        .dark-mode table {
+            background-color: #2c2c2c;
+        }
+        .dark-mode th {
+            background-color: #3e3e3e;
+        }
+        .dark-mode td {
+            border-bottom: 1px solid #444;
+        }
+        .dark-mode tr:hover td {
+            background-color: #353535;
+        }
+        .dark-mode button {
+            background-color: #e67e22;
+        }
+        .dark-mode button:hover {
+            background-color: #d35400;
+        }
+        .dark-mode .status-select {
+            border-color: #666;
+            background-color: #2c2c2c;
+            color: #ddd;
+        }
+        .dark-mode .status-select.applied,
+        .dark-mode .status-select.denied,
+        .dark-mode .status-select.inprogress,
+        .dark-mode .status-select.hired {
+            color: white; /* Ensure text remains white in dark mode */
+        }
+        /* Toggle Switch */
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        .theme-toggle input {
+            display: none;
+        }
+        .theme-toggle label {
+            display: block;
+            width: 50px;
+            height: 24px;
+            background-color: #bdc3c7;
+            border-radius: 12px;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .theme-toggle label::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            left: 2px;
+            top: 2px;
+            background-color: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+        .theme-toggle input:checked + label {
+            background-color: #3498db;
+        }
+        .theme-toggle input:checked + label::after {
+            transform: translateX(26px);
+        }
+    </style>
+</head>
+<body>
+    <div class="theme-toggle">
+        <input type="checkbox" id="themeSwitch" onchange="toggleTheme()">
+        <label for="themeSwitch"></label>
+    </div>
+    <h1>Applicant Viewer</h1>
+    <button onclick="fetchData()">Fetch Applicants</button>
+    <div id="error"></div>
+    <table id="dataTable">
+        <thead>
+            <tr>
+                <th>Applicant ID</th>
+                <th>Name</th>
+                <th>Position Applied</th>
+                <th>Expected Weekly Earnings</th>
+                <th>Sentiment</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody id="dataBody"></tbody>
+    </table>
+
+    <script>
+        // Replace this with your API Gateway Invoke URL
+        const API_ENDPOINT = 'https://3qvi0x81e2.execute-api.us-east-1.amazonaws.com/prod/items';
+
+        async function fetchData() {
+            try {
+                document.getElementById('error').style.display = 'none';
+                document.getElementById('dataBody').innerHTML = '';
+
+                const response = await fetch(API_ENDPOINT);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const text = await response.text();
+                console.log('Raw response:', text);
+                const data = JSON.parse(text);
+
+                if (!data.Items || data.Items.length === 0) {
+                    document.getElementById('dataBody').innerHTML = '<tr><td colspan="8">No applicants found</td></tr>';
+                    return;
+                }
+
+                const tbody = document.getElementById('dataBody');
+                data.Items.forEach(item => {
+                    const tr = document.createElement('tr');
+                    
+                    const tdId = document.createElement('td');
+                    tdId.textContent = item.ApplicantId?.S || 'N/A';
+                    tr.appendChild(tdId);
+
+                    const tdName = document.createElement('td');
+                    tdName.textContent = item.ApplicantName?.S || 'N/A';
+                    tr.appendChild(tdName);
+
+                    const tdPosition = document.createElement('td');
+                    tdPosition.textContent = item.PositionApplied?.S || 'N/A';
+                    tr.appendChild(tdPosition);
+
+                    const tdEarnings = document.createElement('td');
+                    tdEarnings.textContent = item.ExpectedWeeklyEarnings?.S || 'N/A';
+                    tr.appendChild(tdEarnings);
+
+                    const tdSentiment = document.createElement('td');
+                    tdSentiment.textContent = item.Sentiment?.S || 'N/A';
+                    tr.appendChild(tdSentiment);
+
+                    let city = 'N/A';
+                    let state = 'N/A';
+                    if (item.TopEntities?.L) {
+                        const locations = item.TopEntities.L.filter(entity => 
+                            entity.M?.Type?.S === 'LOCATION'
+                        ).map(entity => ({
+                            text: entity.M?.Text?.S || 'N/A',
+                            redacted: entity.M?.Redacted?.BOOL || false
+                        }));
+
+                        const nonRedacted = locations.find(loc => !loc.redacted);
+                        if (nonRedacted) city = nonRedacted.text;
+
+                        const possibleState = locations.find(loc => loc.redacted || loc !== nonRedacted);
+                        if (possibleState) state = possibleState.text;
+                    }
+
+                    const tdCity = document.createElement('td');
+                    tdCity.textContent = city;
+                    tr.appendChild(tdCity);
+
+                    const tdState = document.createElement('td');
+                    tdState.textContent = state;
+                    tr.appendChild(tdState);
+
+                    // Add status dropdown
+                    const tdStatus = document.createElement('td');
+                    const statusSelect = document.createElement('select');
+                    statusSelect.className = 'status-select';
+                    const status = item.Status?.S?.toLowerCase() || 'N/A';
+
+                    // Define options
+                    const options = [
+                        { value: 'applied', text: 'Applied' },
+                        { value: 'inprogress', text: 'In Progress' },
+                        { value: 'denied', text: 'Denied' },
+                        { value: 'hired', text: 'Hired' }
+                    ];
+
+                    // Create and append options
+                    options.forEach(option => {
+                        const opt = document.createElement('option');
+                        opt.value = option.value;
+                        opt.textContent = option.text;
+                        if (status === option.value) {
+                            opt.selected = true;
+                            statusSelect.classList.add(option.value);
+                        }
+                        statusSelect.appendChild(opt);
+                    });
+
+                    // Add event listener to update style on change
+                    statusSelect.addEventListener('change', function() {
+                        statusSelect.className = 'status-select'; // Reset classes
+                        statusSelect.classList.add(this.value); // Add new status class
+                    });
+
+                    tdStatus.appendChild(statusSelect);
+                    tr.appendChild(tdStatus);
+
+                    tbody.appendChild(tr);
+                });
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                const errorDiv = document.getElementById('error');
+                errorDiv.textContent = 'Error fetching data: ' + error.message;
+                errorDiv.style.display = 'block';
+            }
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+        }
+    </script>
+</body>
+</html>
