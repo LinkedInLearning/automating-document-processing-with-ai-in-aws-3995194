@@ -1,0 +1,32 @@
+{
+    "jobId": "sample-textract-loan-app-456",
+    "results": {
+        "text": [
+            "Loan Applicant: Aisha Patel",
+            "Social Security Number: 123-45-6789",
+            "Address: 123 Main St, Springfield, IL 62701",
+            "Loan Application submitted on February 10, 2025",
+            "Contact: aisha.patel@example.com",
+            "Requested Loan Amount: $25,000"
+        ],
+        "forms": {
+            "Applicant_Name": "Aisha Patel",
+            "SSN": "123-45-6789",
+            "Address": "123 Main St, Springfield, IL 62701",
+            "Phone": "555-987-6543",
+            "Annual_Income": "$75,000",
+            "Employer": "Acme Corp",
+            "Loan_Amount": "$25,000"
+        },
+        "tables": [
+            {
+                "rows": [
+                    ["Field", "Value"],
+                    ["Applicant Name", "Aisha Patel"],
+                    ["Monthly Income", "$6,250"],
+                    ["Employment Duration", "5 years"]
+                ]
+            }
+        ]
+    }
+}
