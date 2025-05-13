@@ -1,33 +1,50 @@
 {
-    body: {
-        textractResult: {
-            jobId: abc123
+    "body": {
+        "textractResult": {
+            "jobId": "abc123"
         },
-        comprehendResult: {
-            textract_job_id: abc123,
-            insights: {
-                sentiment: {
-                    full_document: {
-                        Sentiment: POSITIVE,
-                        Scores: {Positive: 0.9}
+        "comprehendResult": {
+            "textract_job_id": "abc123",
+            "insights": {
+                "sentiment": {
+                    "full_document": {
+                        "Sentiment": "POSITIVE",
+                        "Scores": {
+                            "Positive": 0.9
+                        }
                     }
                 },
-                entities: {
-                    forms: {
-                        PERSON: [
-                            {Text: Jane, Redacted: false},
-                            {Text: Doe, Redacted: false}
+                "entities": {
+                    "forms": {
+                        "PERSON": [
+                            {
+                                "Text": "Jane",
+                                "Redacted": false
+                            },
+                            {
+                                "Text": "Doe",
+                                "Redacted": false
+                            }
                         ],
-                        OTHER: [
-                            {Text: jane.doe@mycompany.com, Redacted: true},
-                            {Text: Software Engineer, Redacted: false}
+                        "OTHER": [
+                            {
+                                "Text": "jane.doe@mycompany.com",
+                                "Redacted": true
+                            },
+                            {
+                                "Text": "Software Engineer",
+                                "Redacted": false
+                            }
                         ]
                     }
                 },
-                key_phrases: {
-                    full_document: {
-                        TopPhrases: [
-                            {Phrase: Software Engineer, Redacted: false}
+                "key_phrases": {
+                    "full_document": {
+                        "TopPhrases": [
+                            {
+                                "Phrase": "Software Engineer",
+                                "Redacted": false
+                            }
                         ]
                     }
                 }
