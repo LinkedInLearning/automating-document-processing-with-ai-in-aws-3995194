@@ -6,10 +6,10 @@
       "Type": "Task",
       "Resource": "arn:aws:states:::lambda:invoke",
       "Parameters": {
-        "FunctionName": "arn:aws:lambda:us-east-1:YOUR_ACCOUNT_NUMBER:function:testing-textract-lambda:$LATEST",
+        "FunctionName": "arn:aws:lambda:us-east-1:041704031581:function:idp-textract-processor:$LATEST",
         "Payload": {
-          "bucket.$": "$.bucket",
-          "key.$": "$.key"
+          "bucket.$": "$.detail.bucket.name",
+          "key.$": "$.detail.object.key"
         }
       },
       "Next": "ComprehendAnalysis",
@@ -19,7 +19,7 @@
       "Type": "Task",
       "Resource": "arn:aws:states:::lambda:invoke",
       "Parameters": {
-        "FunctionName": "arn:aws:lambda:us-east-1:YOUR_ACCOUNT_NUMBER:function:testing-comprehend-lambda:$LATEST",
+        "FunctionName": "arn:aws:lambda:us-east-1:041704031581:function:idp-comprehend-processor:$LATEST",
         "Payload.$": "$.Payload"
       },
       "Next": "SaveToDynamoDB",
@@ -29,7 +29,7 @@
       "Type": "Task",
       "Resource": "arn:aws:states:::lambda:invoke",
       "Parameters": {
-        "FunctionName": "arn:aws:lambda:us-east-1:YOUR_ACCOUNT_NUMBER:function:testing-dynamo-db-lambda:$LATEST",
+        "FunctionName": "arn:aws:lambda:us-east-1:041704031581:function:idp-dynamodb-processor:$LATEST",
         "Payload": {
           "body": {
             "textractResult.$": "$.Payload",
