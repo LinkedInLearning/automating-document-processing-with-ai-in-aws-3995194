@@ -1,0 +1,20 @@
+{
+    "TableName": "JobApplications",
+    "Key": {
+        "JobId": {
+            "S": "$input.params('jobId')"
+        },
+        "ApplicantId": {
+            "S": "$input.params('applicantId')"
+        }
+    },
+    "UpdateExpression": "SET #status = :status",
+    "ExpressionAttributeNames": {
+        "#status": "Status"
+    },
+    "ExpressionAttributeValues": {
+        ":status": {
+            "S": "$input.json('Status')"
+        }
+    },
+    "ReturnValues": "UPDATED_NEW"
