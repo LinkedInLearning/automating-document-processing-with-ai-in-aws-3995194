@@ -1,0 +1,3 @@
+{
+    attributes: $input.json('$.Attributes')
+}
