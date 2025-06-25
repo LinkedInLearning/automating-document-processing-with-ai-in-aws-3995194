@@ -73,7 +73,6 @@
             background-color: #f9fbfc;
             transition: background-color 0.2s;
         }
-        /* Status Dropdown Styles */
         .status-select {
             padding: 6px 12px;
             border-radius: 4px;
@@ -98,7 +97,6 @@
             background-color: #2ecc71;
             color: white;
         }
-        /* Dark Mode */
         .dark-mode body {
             background-color: #1a1a1a;
             color: #ddd;
@@ -133,9 +131,8 @@
         .dark-mode .status-select.denied,
         .dark-mode .status-select.inprogress,
         .dark-mode .status-select.hired {
-            color: white; /* Ensure text remains white in dark mode */
+            color: white;
         }
-        /* Toggle Switch */
         .theme-toggle {
             position: absolute;
             top: 20px;
@@ -198,8 +195,8 @@
     </table>
 
     <script>
-        // Replace this with your API Gateway Invoke URL
-        const API_ENDPOINT = 'https://3qvi0x81e2.execute-api.us-east-1.amazonaws.com/prod/items';
+        // Replace with your API Gateway Invoke URL
+        const API_ENDPOINT = 'https://opi5a14uai.execute-api.us-east-1.amazonaws.com/development/items';
 
         async function fetchData() {
             try {
@@ -236,45 +233,26 @@
                     tr.appendChild(tdPosition);
 
                     const tdEarnings = document.createElement('td');
-                    tdEarnings.textContent = item.ExpectedWeeklyEarnings?.S || 'N/A';
+                    tdEarnings.textContent = item.ExpectedWeeklyEarnings?.S || item.SalaryDesired?.S || 'N/A';
                     tr.appendChild(tdEarnings);
 
                     const tdSentiment = document.createElement('td');
                     tdSentiment.textContent = item.Sentiment?.S || 'N/A';
                     tr.appendChild(tdSentiment);
 
-                    let city = 'N/A';
-                    let state = 'N/A';
-                    if (item.TopEntities?.L) {
-                        const locations = item.TopEntities.L.filter(entity => 
-                            entity.M?.Type?.S === 'LOCATION'
-                        ).map(entity => ({
-                            text: entity.M?.Text?.S || 'N/A',
-                            redacted: entity.M?.Redacted?.BOOL || false
-                        }));
-
-                        const nonRedacted = locations.find(loc => !loc.redacted);
-                        if (nonRedacted) city = nonRedacted.text;
-
-                        const possibleState = locations.find(loc => loc.redacted || loc !== nonRedacted);
-                        if (possibleState) state = possibleState.text;
-                    }
-
                     const tdCity = document.createElement('td');
-                    tdCity.textContent = city;
+                    tdCity.textContent = item.City?.S || 'N/A';
                     tr.appendChild(tdCity);
 
                     const tdState = document.createElement('td');
-                    tdState.textContent = state;
+                    tdState.textContent = item.State?.S || 'N/A';
                     tr.appendChild(tdState);
 
-                    // Add status dropdown
                     const tdStatus = document.createElement('td');
                     const statusSelect = document.createElement('select');
                     statusSelect.className = 'status-select';
-                    const status = item.Status?.S?.toLowerCase() || 'N/A';
+                    const status = item.Status?.S?.toLowerCase() || 'applied';
 
-                    // Define options
                     const options = [
                         { value: 'applied', text: 'Applied' },
                         { value: 'inprogress', text: 'In Progress' },
@@ -282,7 +260,6 @@
                         { value: 'hired', text: 'Hired' }
                     ];
 
-                    // Create and append options
                     options.forEach(option => {
                         const opt = document.createElement('option');
                         opt.value = option.value;
@@ -294,10 +271,9 @@
                         statusSelect.appendChild(opt);
                     });
 
-                    // Add event listener to update style on change
                     statusSelect.addEventListener('change', function() {
-                        statusSelect.className = 'status-select'; // Reset classes
-                        statusSelect.classList.add(this.value); // Add new status class
+                        statusSelect.className = 'status-select';
+                        statusSelect.classList.add(this.value);
                     });
 
                     tdStatus.appendChild(statusSelect);
