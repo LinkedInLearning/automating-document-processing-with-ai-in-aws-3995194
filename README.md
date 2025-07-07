@@ -1,5 +1,11 @@
-# COURSENAME
-This is the repository for the LinkedIn Learning course `course-name`. The full course is available from [LinkedIn Learning][lil-course-url].
+# Automating Document Processing with AI in AWS
+This is the repository for the LinkedIn Learning course `Automating Document Processing with AI in AWS`. The full course is available from [LinkedIn Learning][lil-course-url].
+
+![lil-thumbnail-url]
+
+## Course Decription
+
+Unlock the power of AI-driven automation with intelligent document processing in AWS. This course equips you with the skills to design and implement advanced document processing workflows using AWS AI services like Textract, Comprehend, and Step Functions. Learn to seamlessly integrate these services with tools such as Step Functions, Lambda, and DynamoDB, creating scalable, automated pipelines. Master strategies to build secure and cost-effective AI workflows, including robust security measures, governance practices, and cost optimization. Whether you're an AWS professional or a solutions architect, this course can help you elevate your ability to process documents intelligently and efficiently.
 
 _See the readme file in the main branch for updated instructions and information._
 ## Instructions
@@ -20,18 +26,12 @@ To resolve this issue:
     Add changes to git using this command: git add .
 	Commit changes using this command: git commit -m "some message"
 
-## Installing
-1. To use these exercise files, you must have the following installed:
-	- [list of requirements for course]
-2. Clone this repository into your local machine using the terminal (Mac), CMD (Windows), or a GUI tool like SourceTree.
-3. [Course-specific instructions]
 
 ## Instructor
 
-Instructor name
+Errol Hooper
 
-Instructor description
-
+Software Engineering and People Leader
                             
 
 Check out my other courses on [LinkedIn Learning](https://www.linkedin.com/learning/instructors/).
@@ -40,5 +40,5 @@ Check out my other courses on [LinkedIn Learning](https://www.linkedin.com/learn
 [0]: # (Replace these placeholder URLs with actual course URLs)
 
 [lil-course-url]: https://www.linkedin.com/learning/
-[lil-thumbnail-url]: http://
+[lil-thumbnail-url]: https://media.licdn.com/dms/image/v2/D4E0DAQF6zUYNmmxMig/learning-public-crop_675_1200/B4EZfBZ4nvGwAY-/0/1751296478386?e=2147483647&v=beta&t=ICsAopaV8hhvC65R8-Dd7c5f64ESvVdkFJgYBePUSis
 
